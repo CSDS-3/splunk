@@ -1,0 +1,221 @@
+<form version="1.1" theme="dark">
+  <label>VULN</label>
+  <search id="base">
+    <query>
+    index=tenable sourcetype=tenable:io:vuln $severity$
+    | fields plugin.*, severity, ipv4,asset_*, last_found, output, state, scan.*, _time ,severity_id, first_found
+    | stats latest(_time) as _time, latest(*) as * , values(plugin.cve{}) as plugin.cve{}, by asset_uuid,plugin.id
+    | search state=*open* plugin.exploit_available=$exploit$
+  </query>
+    <earliest>$earliest$</earliest>
+    <latest>$latest$</latest>
+  </search>
+  <fieldset submitButton="false" autoRun="false">
+    <input type="time" searchWhenChanged="true">
+      <label>Filter by Time</label>
+      <default>
+        <earliest>-7d@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="checkbox" token="severity" searchWhenChanged="true">
+      <label>Filter by Severity</label>
+      <choice value="severity=critical">Critical</choice>
+      <choice value="severity=high">High</choice>
+      <choice value="severity=medium">Medium</choice>
+      <choice value="severity=low">Low</choice>
+      <delimiter> OR </delimiter>
+      <default>Critical,High</default>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+    </input>
+    <input type="checkbox" token="exploit" searchWhenChanged="true">
+      <label>Exploitable</label>
+      <choice value="true">True</choice>
+      <default>*</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <single>
+        <search base="base">
+          <query>
+          | stats count
+        </query>
+        </search>
+        <option name="underLabel">Total Vulns</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <search base="base">
+          <query>
+          | stats count(eval(isnotnull('plugin.cve{}'))) as Has_CVE
+        </query>
+        </search>
+        <option name="underLabel">Vulns with CVE</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <search base="base">
+          <query>
+          | stats dc(asset_uuid)
+        </query>
+        </search>
+        <option name="underLabel">Vulnerable Assets</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>All Vulns</title>
+      <table>
+        <search base="base">
+          <query>
+            | rename plugin.cve{} as cve,plugin.cvss_vector.access_vector as vector, plugin.vuln_publication_date as publication_date plugin.exploit_available as exploitable
+            | stats count by plugin.name, cve, severity, plugin.solution, publication_date, vector, severity_id, exploitable
+            | sort 0 - exploitable, severity_id, count
+            | fields - severity_id
+          </query>
+        </search>
+        <drilldown>
+          <link target="_blank">search?q=index=tenable sourcetype=tenable:io:vuln $severity$ earliest=$earliest$ latest=$latest$
+    | fields plugin.*, severity, ipv4,asset_*, last_found, output, state, scan.*, _time ,severity_id, first_found
+    | stats latest(_time) as _time, latest(*) as * by asset_uuid,plugin.id
+    | search state=*open* plugin.exploit_available=$exploit$ plugin.name="$click.value$"
+    | rename plugin.cve{} as cve,plugin.cvss_vector.access_vector as vector, plugin.vuln_publication_date as publication_date, plugin.solution as solution
+    | table asset_hostname, ipv4, plugin.name, severity, cve, last_found, vector, publication_date, solution, output
+    </link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>By Vendor</title>
+      <chart>
+        <search base="base">
+          <query>
+            | rex field=plugin.cpe{} "cpe:/[oa]:(?&lt;vendor&gt;.*):(?&lt;product&gt;.*)$$"
+            | stats count by vendor
+          </query>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>By Product</title>
+      <chart>
+        <search base="base">
+          <query>
+            | rex field=plugin.cpe{} "cpe:/[oa]:(?&lt;vendor&gt;.*):(?&lt;product&gt;.*)$$"
+            | stats count by product
+          </query>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+     <panel>
+      <title>By Vector</title>
+      <chart>
+        <search base="base">
+          <query>
+            | stats count by plugin.cvss_vector.access_vector
+          </query>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+  </row>
+</form>
