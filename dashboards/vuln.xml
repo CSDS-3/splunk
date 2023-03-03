@@ -50,10 +50,10 @@
       <single>
         <search base="base">
           <query>
-          | stats count(eval(isnotnull('plugin.cve{}'))) as Has_CVE
+          | stats count(eval('plugin.exploit_available'=="true")) as exploitable
         </query>
         </search>
-        <option name="underLabel">Vulns with CVE</option>
+        <option name="underLabel">Exploitable Vulns</option>
       </single>
     </panel>
     <panel>
