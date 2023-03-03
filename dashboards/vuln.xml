@@ -73,8 +73,8 @@
       <table>
         <search base="base">
           <query>
-            | rename plugin.cve{} as cve,plugin.cvss_vector.access_vector as vector, plugin.vuln_publication_date as publication_date plugin.exploit_available as exploitable
-            | stats count by plugin.name, cve, severity, plugin.solution, publication_date, vector, severity_id, exploitable
+            | rename plugin.cvss_vector.access_vector as vector, plugin.vuln_publication_date as publication_date plugin.exploit_available as exploitable
+            | stats count by plugin.name, severity, plugin.solution, publication_date, vector, severity_id, exploitable
             | sort 0 - exploitable, severity_id, count
             | fields - severity_id
           </query>
@@ -82,10 +82,10 @@
         <drilldown>
           <link target="_blank">search?q=index=tenable sourcetype=tenable:io:vuln $severity$ earliest=$earliest$ latest=$latest$
     | fields plugin.*, severity, ipv4,asset_*, last_found, output, state, scan.*, _time ,severity_id, first_found
-    | stats latest(_time) as _time, latest(*) as * by asset_uuid,plugin.id
+    | stats latest(_time) as _time, latest(*) as *  by asset_uuid,plugin.id
     | search state=*open* plugin.exploit_available=$exploit$ plugin.name="$click.value$"
-    | rename plugin.cve{} as cve,plugin.cvss_vector.access_vector as vector, plugin.vuln_publication_date as publication_date, plugin.solution as solution
-    | table asset_hostname, ipv4, plugin.name, severity, cve, last_found, vector, publication_date, solution, output
+    | rename ,plugin.cvss_vector.access_vector as vector, plugin.vuln_publication_date as publication_date, plugin.solution as solution
+    | table asset_hostname, ipv4, plugin.name, severity,  last_found, vector, publication_date, solution, output
     </link>
         </drilldown>
       </table>
