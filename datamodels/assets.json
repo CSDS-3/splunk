@@ -1,0 +1,255 @@
+{
+    "modelName": "Assets",
+    "displayName": "Assets",
+    "description": "",
+    "objectSummary": {
+        "Event-Based": 0,
+        "Transaction-Based": 0,
+        "Search-Based": 1
+    },
+    "objects": [
+        {
+            "objectName": "tio",
+            "displayName": "tio",
+            "parentName": "BaseSearch",
+            "comment": "",
+            "fields": [
+                {
+                    "fieldName": "_time",
+                    "owner": "tio",
+                    "type": "timestamp",
+                    "fieldSearch": "_time=*",
+                    "required": true,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "_time",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "agent_uuid",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "agent_uuid",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "aws_ec2_instance_ami_id",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "aws_ec2_instance_ami_id",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "aws_ec2_instance_id",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "aws_ec2_instance_id",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "aws_vpc_id",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "aws_vpc_id",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "created_at",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "created_at",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "first_scan_time",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "first_scan_time",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "first_seen",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "first_seen",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "has_agent",
+                    "owner": "tio",
+                    "type": "boolean",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "has_agent",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "has_plugin_results",
+                    "owner": "tio",
+                    "type": "boolean",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "has_plugin_results",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "hostnames",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "hostnames",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "installed_software",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "installed_software",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "ipv4s",
+                    "owner": "tio",
+                    "type": "ipv4",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "ipv4s",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "last_authenticated_scan_date",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "last_authenticated_scan_date",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "last_seen",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "last_seen",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "operating_systems",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "operating_systems",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "state",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "state",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "system_types",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "system_types",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "uuid",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "uuid",
+                    "comment": ""
+                }
+            ],
+            "calculations": [],
+            "constraints": [],
+            "lineage": "tio",
+            "baseSearch": "index=tenable sourcetype=\"tenable:io:assets\" earliest=-30d@d\n| fields - punct, servicenow*, splunk*, network_id, mcafee_* IO_address,azure*,bigfix_*,index,source,host,linecount,sourcetype, gcp_*\n| foreach *{} \n    [| eval <<FIELD>>=mvjoin('<<FIELD>>',\",\")]\n| stats latest(_time) as _time, latest(*) as * by uuid\n| foreach *{} \n    [| eval <<MATCHSTR>>=split('<<MATCHSTR>>',\",\")]\n| fields - *{}\n| table agent_uuid,aws_ec2_instance_ami_id, aws_ec2_instance_id, aws_vpc_id, created_at,first_scan_time, first_seen, has_agent, has_plugin_results, hostnames, installed_software, ipv4s, last_authenticated_scan_date, last_seen, operating_systems, state, system_types, uuid\n| eval _time=strptime(last_seen,\"%FT%T.%fZ\")"
+        }
+    ],
+    "objectNameList": [
+        "tio"
+    ]
+}
