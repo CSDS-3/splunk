@@ -1,0 +1,132 @@
+<form version="1.1" theme="dark">
+  <label>Compliance</label>
+  <search id="base">
+    <query>
+       index=tenable sourcetype=tenable:io:audits 
+      | lookup zen_assets.csv uuid as asset_uuid output aws_ec2_instance_id,first_seen as asset_first_seen, hostnames, ipv4s, last_seen as asset_last_seen, operating_systems, state as asset_state
+      | search asset_state=active
+      | rex field=description "Severity: CAT (?&lt;severity>I+)"
+      | search $severity$
+      | fields  severity, ipv4s,asset_*, last_seen, output, status, state, scan.*, _time ,severity_id, first_found, check_info, check_name, expected_value, actual_value, solution, hostnames, operating_systems,aws_ec2_instance_id
+      | stats latest(_time) as _time, latest(*) as * by asset_uuid,check_name
+      | search state=active
+  </query>
+    <earliest>$earliest$</earliest>
+    <latest>$latest$</latest>
+  </search>
+  <fieldset submitButton="false" autoRun="false">
+    <input type="time" searchWhenChanged="true">
+      <label>Filter by Time</label>
+      <default>
+        <earliest>-7d@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="checkbox" token="severity" searchWhenChanged="true">
+      <label>Filter by Severity</label>
+      <choice value="severity=I">Critical</choice>
+      <choice value="severity=II">High</choice>
+      <choice value="severity=III">Medium</choice>
+      <delimiter> OR </delimiter>
+      <default>Critical,High</default>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <single>
+        <search base="base">
+          <query>
+          | stats count(eval(status=="FAILED")) as failed
+        </query>
+        </search>
+        <option name="underLabel">Total Failed Audits</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <search base="base">
+          <query>
+          | stats count(eval(status=="WARNING")) as warning
+        </query>
+        </search>
+        <option name="underLabel">Audits with Warnings</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <search base="base">
+          <query>
+          | stats dc(eval(if(status=="FAILED",asset_uuid,null))) as dc_vuln
+        </query>
+        </search>
+        <option name="underLabel">Vulnerable Assets</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>All Failed Audits</title>
+      <table>
+        <search base="base">
+          <query>
+            | search status=failed
+            | stats count by check_name, severity, solution, check_info
+            | sort 0  severity - count
+         
+          </query>
+        </search>
+        <drilldown>
+          <link target="_blank">search?q=earliest%3D$earliest$%20latest%3D$latest$%20%20index%3Dtenable%20sourcetype%3Dtenable%3Aio%3Aaudits%20check_name%3D%22$click.value$%22%0A%20%20%20%20%20%20%7C%20lookup%20zen_assets.csv%20uuid%20as%20asset_uuid%20output%20aws_ec2_instance_id%2Cfirst_seen%20as%20asset_first_seen%2C%20hostnames%2C%20ipv4s%2C%20last_seen%20as%20asset_last_seen%2C%20operating_systems%2C%20state%20as%20asset_state%0A%20%20%20%20%20%20%7C%20search%20asset_state%3Dactive%0A%20%20%20%20%20%20%7C%20rex%20field%3Ddescription%20%22Severity%3A%20CAT%20(%3F%3Cseverity%3EI%2B)%22%0A%20%20%20%20%20%20%7C%20search%20$severity$%20%0A%20%20%20%20%20%20%7C%20fields%20%20severity%2C%20ipv4s%2Casset_*%2C%20last_seen%2C%20output%2C%20status%2C%20state%2C%20scan.*%2C%20_time%20%2Cseverity_id%2C%20first_found%2C%20check_info%2C%20check_name%2C%20expected_value%2C%20actual_value%2C%20solution%2C%20hostnames%2C%20operating_systems%2Caws_ec2_instance_id%0A%20%20%20%20%20%20%7C%20stats%20latest(_time)%20as%20_time%2C%20latest(*)%20as%20*%20by%20asset_uuid%2Ccheck_name%0A%20%20%20%20%7C%20table%20hostnames%2C%20ipv4s%2C%20aws_ec2_instance_id%2C%20check_name%2C%20severity%2C%20%20last_seen%2C%20check_info%2C%20solution%2C%20actual_value
+    </link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Failed Audits by OS</title>
+      <chart>
+        <search base="base">
+          <query>
+            | search status=failed
+            | stats count by operating_systems
+          </query>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+   
+  </row>
+</form>
