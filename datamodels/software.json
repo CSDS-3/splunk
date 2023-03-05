@@ -1,0 +1,231 @@
+{
+    "modelName": "Software",
+    "displayName": "Software",
+    "description": "",
+    "objectSummary": {
+        "Event-Based": 0,
+        "Transaction-Based": 0,
+        "Search-Based": 1
+    },
+    "objects": [
+        {
+            "objectName": "tio",
+            "displayName": "tio",
+            "parentName": "BaseSearch",
+            "comment": "",
+            "fields": [
+                {
+                    "fieldName": "_time",
+                    "owner": "tio",
+                    "type": "timestamp",
+                    "fieldSearch": "_time=*",
+                    "required": true,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "_time",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "aws_ec2_instance_ami_id",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "aws_ec2_instance_ami_id",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "aws_ec2_instance_id",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "aws_ec2_instance_id",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "aws_vpc_id",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "aws_vpc_id",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "created_at",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "created_at",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "first_seen",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "first_seen",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "hostnames",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "hostnames",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "ipv4s",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "ipv4s",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "last_authenticated_scan_date",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "last_authenticated_scan_date",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "last_seen",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "last_seen",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "operating_systems",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "operating_systems",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "product",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "product",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "state",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "state",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "system_types",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "system_types",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "uuid",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "uuid",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "vendor",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "vendor",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "version",
+                    "owner": "tio",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "version",
+                    "comment": ""
+                }
+            ],
+            "calculations": [],
+            "constraints": [],
+            "lineage": "tio",
+            "baseSearch": "| inputlookup zen_assets.csv \n| mvexpand installed_software\n|  rex max_match=0 field=installed_software \"cpe:/a:(?<vendor>.*):(?<product>.*):(?<version>[\\d\\.]+)$\"\n| eval _time=strptime(last_seen,\"%FT%T.%fZ\")"
+        }
+    ],
+    "objectNameList": [
+        "tio"
+    ]
+}
