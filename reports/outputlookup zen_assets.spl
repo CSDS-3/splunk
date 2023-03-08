@@ -1,10 +1,10 @@
 index=tenable sourcetype="tenable:io:assets" earliest=-1d@d
 | fields - punct, servicenow*, splunk*, network_id, mcafee_* IO_address,azure*,bigfix_*,index,source,host,linecount,sourcetype, gcp_*
-| foreach *{} 
+| foreach *{}
     [| eval <<FIELD>>=mvjoin('<<FIELD>>',",")]
-| stats latest(_time) as _time, latest(*) as * by uuid
+| stats latest(_time) as _time, latest(*) as * ,values("sources{}.name") as sources by uuid
 | foreach *{} 
     [| eval <<MATCHSTR>>=split('<<MATCHSTR>>',",")]
 | fields - *{}
-| table agent_uuid,aws_ec2_instance_ami_id, aws_ec2_instance_id, aws_vpc_id, created_at,first_scan_time, first_seen, has_agent, has_plugin_results, hostnames, installed_software, ipv4s, last_authenticated_scan_date, last_seen, operating_systems, state, system_types, uuid
+| table agent_uuid,aws_ec2_instance_ami_id, aws_ec2_instance_id, aws_vpc_id, created_at,first_scan_time, first_seen, has_agent, has_plugin_results, hostnames, installed_software, ipv4s, last_authenticated_scan_date, last_seen, operating_systems, state, system_types, uuid, sources
 | outputlookup output_format=splunk_mv_csv zen_assets.csv
